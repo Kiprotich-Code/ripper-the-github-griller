@@ -47,3 +47,7 @@ Thumbs.db
 .genkit
 .firebase/logs/vsce-debug.log
 firebase-debug.log
+
+
+# Env 
+.env
