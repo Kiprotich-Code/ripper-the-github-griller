@@ -227,6 +227,9 @@ const workflowHealthFlow = ai.defineFlow(
 export const workflowHealthFunction = onCallGenkit(
   {
     secrets: [githubToken, geminiApiKey],
+    cors: {
+      origin: ['http://localhost:4200', 'https://github-griller.web.app'],
+    },
   },
   workflowHealthFlow,
 );
