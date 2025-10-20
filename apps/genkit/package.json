@@ -4,5 +4,8 @@
   "main": "index.js",
   "engines": {
     "node": "22"
+  },
+  "dependencies": {
+    "firebase-tools": "^14.20.0"
   }
 }
