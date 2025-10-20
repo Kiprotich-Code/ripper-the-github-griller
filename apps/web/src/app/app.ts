@@ -14,23 +14,29 @@ export class App {
   functions = inject(Functions);
   isRoastCardOpen = signal(false);
 
-  roastMutations = injectMutation(() => ({
-    mutationFn: async (username: string) => {
-      const callable = httpsCallable<{ username: string }, string>(
+  workflowHealthMutation = injectMutation(() => ({
+    mutationFn: async (repoInput: string) => {
+      const [owner, repo] = repoInput.split('/').map(s => s.trim());
+      
+      if (!owner || !repo) {
+        throw new Error('Please enter a valid repository in format: owner/repo');
+      }
+      
+      const callable = httpsCallable<{ owner: string; repo: string }, string>(
         this.functions,
-        'githubGrillerFunction',
+        'workflowHealthFunction',
       );
-      const result = await callable({ username });
-      console.log('Roast result:', result);
+      const result = await callable({ owner, repo });
+      console.log('Workflow health result:', result);
       return result.data;
     },
     onSuccess: (data: string) => {
-      console.log('Roast successful:', data);
+      console.log('Analysis successful:', data);
       this.isRoastCardOpen.set(true);
     },
-    onError: (error: any) => {
-      console.error('Roast failed:', error);
-      alert('Failed to roast the user. Please try again.');
+    onError: (error: unknown) => {
+      console.error('Analysis failed:', error);
+      alert('Failed to analyze workflows. Please check the repository name and try again.');
     },
   }));
 

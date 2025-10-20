@@ -22,7 +22,7 @@ export class RoastCardComponent {
     import('html2canvas').then((html2canvas) => {
       html2canvas.default(card).then((canvas: HTMLCanvasElement) => {
         const link = document.createElement('a');
-        link.download = 'github-roast-card.png';
+        link.download = 'workflow-health-report.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
       });
@@ -40,14 +40,17 @@ export class RoastCardComponent {
             'share' in navigator &&
             blob
           ) {
-            const file = new File([blob], 'github-roast-card.png', {
+            const file = new File([blob], 'workflow-health-report.png', {
               type: 'image/png',
             });
-            (navigator as any).share({
-              title: 'GitHub Griller Roast',
-              text: 'Check out my roast from GitHub Griller! 🎃',
-              files: [file],
-            });
+            const nav = navigator as { share?: (data: { title: string; text: string; files: File[] }) => Promise<void> };
+            if (nav.share) {
+              nav.share({
+                title: 'GitHub Workflow Health Report',
+                text: 'Check out this workflow health analysis! 📊',
+                files: [file],
+              });
+            }
           } else {
             alert(
               'Sharing is not supported in this browser. Please download instead.',
